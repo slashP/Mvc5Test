@@ -103,6 +103,15 @@ namespace Mvc5Test.Models
         {
         }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Book>()
+                .HasMany(x => x.Genres)
+                .WithMany(x => x.Books)
+                .Map(x => x.ToTable("BookGenre").MapLeftKey("BookId").MapRightKey("GenreId"));
+            base.OnModelCreating(modelBuilder);
+        }
+
         // This method ensures that user names are always unique
         protected override DbEntityValidationResult ValidateEntity(DbEntityEntry entityEntry, IDictionary<object, object> items)
         {
@@ -125,5 +134,8 @@ namespace Mvc5Test.Models
         public DbSet<UserLogin> UserLogins { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Genre> Genre { get; set; }
+
+        public DbSet<Mvc5Test.Models.Book> Book { get; set; }
     }
 }
